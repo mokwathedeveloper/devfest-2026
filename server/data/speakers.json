@@ -1,0 +1,146 @@
+[
+  {
+    "id": "speaker-001",
+    "name": "Alex Morgan",
+    "title": "Senior Software Engineer",
+    "company": "Tech Community",
+    "bio": "Alex builds production AI features and teaches developers how to move from prototypes to reliable products. Passionate about artificial intelligence and cloud computing.",
+    "photo": "/uploads/d836ef147438c3d6adbcf176.jpg",
+    "expertise": [
+      "AI",
+      "Cloud Computing",
+      "Python"
+    ],
+    "socials": {
+      "linkedin": "https://www.linkedin.com/",
+      "github": "https://github.com/",
+      "twitter": ""
+    }
+  },
+  {
+    "id": "speaker-002",
+    "name": "Priya Nair",
+    "title": "Cloud Solutions Architect",
+    "company": "Nimbus Labs",
+    "bio": "Priya designs scalable serverless systems and has helped dozens of startups cut their infrastructure bills in half.",
+    "photo": "/images/speakers/priya-nair.svg",
+    "expertise": [
+      "Serverless",
+      "Cloud Run",
+      "Architecture"
+    ],
+    "socials": {
+      "linkedin": "https://www.linkedin.com/",
+      "github": "https://github.com/",
+      "twitter": ""
+    }
+  },
+  {
+    "id": "speaker-003",
+    "name": "Tunde Adebayo",
+    "title": "Machine Learning Engineer",
+    "company": "Aurora AI",
+    "bio": "Tunde works on LLM-powered agents and evaluation pipelines, with a focus on safety and observability in production.",
+    "photo": "/images/speakers/tunde-adebayo.svg",
+    "expertise": [
+      "LLM Agents",
+      "MLOps",
+      "Evaluation"
+    ],
+    "socials": {
+      "linkedin": "",
+      "github": "https://github.com/",
+      "twitter": "https://x.com/"
+    }
+  },
+  {
+    "id": "speaker-004",
+    "name": "Mei Lin Zhao",
+    "title": "Web Performance Lead",
+    "company": "Pixel & Co",
+    "bio": "Mei Lin obsesses over Core Web Vitals and has spoken at community events around the world about making the web fast for everyone.",
+    "photo": "/images/speakers/mei-lin-zhao.svg",
+    "expertise": [
+      "Web Performance",
+      "JavaScript",
+      "Chrome DevTools"
+    ],
+    "socials": {
+      "linkedin": "https://www.linkedin.com/",
+      "github": "",
+      "twitter": "https://x.com/"
+    }
+  },
+  {
+    "id": "speaker-005",
+    "name": "Carlos Mendoza",
+    "title": "Mobile Developer Advocate",
+    "company": "AppForge",
+    "bio": "Carlos helps teams ship polished cross-platform apps with Flutter and Kotlin, and loves exploring on-device machine learning.",
+    "photo": "/images/speakers/carlos-mendoza.svg",
+    "expertise": [
+      "Flutter",
+      "Kotlin",
+      "On-device ML"
+    ],
+    "socials": {
+      "linkedin": "https://www.linkedin.com/",
+      "github": "https://github.com/",
+      "twitter": ""
+    }
+  },
+  {
+    "id": "speaker-006",
+    "name": "Amara Okafor",
+    "title": "Platform Engineer",
+    "company": "Orbit Systems",
+    "bio": "Amara runs internal developer platforms and makes Kubernetes approachable for teams who just want to ship.",
+    "photo": "/images/speakers/amara-okafor.svg",
+    "expertise": [
+      "Kubernetes",
+      "DevOps",
+      "Platform Engineering"
+    ],
+    "socials": {
+      "linkedin": "https://www.linkedin.com/",
+      "github": "https://github.com/",
+      "twitter": ""
+    }
+  },
+  {
+    "id": "speaker-007",
+    "name": "Jonas Weber",
+    "title": "Accessibility Engineer",
+    "company": "Open Interface Foundation",
+    "bio": "Jonas champions inclusive design and helps engineering teams build accessibility into their workflow from day one.",
+    "photo": "/images/speakers/jonas-weber.svg",
+    "expertise": [
+      "Accessibility",
+      "UX Engineering",
+      "Design Systems"
+    ],
+    "socials": {
+      "linkedin": "https://www.linkedin.com/",
+      "github": "https://github.com/",
+      "twitter": ""
+    }
+  },
+  {
+    "id": "speaker-008",
+    "name": "Sofia Rossi",
+    "title": "Community Lead",
+    "company": "Dev Community Network",
+    "bio": "Sofia has organised developer meetups and conferences for over a decade and writes about sustainable open source communities.",
+    "photo": "/images/speakers/sofia-rossi.svg",
+    "expertise": [
+      "Community",
+      "Open Source",
+      "Leadership"
+    ],
+    "socials": {
+      "linkedin": "https://www.linkedin.com/",
+      "github": "",
+      "twitter": "https://x.com/"
+    }
+  }
+]

@@ -1,0 +1,28 @@
+{
+  "isDemo": true,
+  "demoNotice": "DEMONSTRATION DATA — all event details, dates, venues, speakers and sessions are placeholders.",
+  "name": "DevFest 2026",
+  "tagline": "Two days of talks, workshops and good conversation.",
+  "description": "DevFest is a community-run gathering for people who build things. Come for the talks on AI, cloud, web and mobile; stay for the workshops, the hallway chats and the coffee line debates. Bring a laptop and a question.",
+  "startDate": "2026-12-05",
+  "endDate": "2026-12-06",
+  "venue": {
+    "name": "Demo Convention Center",
+    "address": "123 Placeholder Avenue",
+    "city": "Example City"
+  },
+  "expectedAttendees": 800,
+  "rooms": [
+    "Main Hall",
+    "Room A",
+    "Room B",
+    "Workshop Lab"
+  ],
+  "sessionTypes": [
+    "Keynote",
+    "Technical Talk",
+    "Workshop",
+    "Panel",
+    "Lightning Talks"
+  ]
+}

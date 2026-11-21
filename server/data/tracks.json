@@ -1,0 +1,7 @@
+[
+  { "id": "track-ai", "name": "Artificial Intelligence", "color": "#4285F4" },
+  { "id": "track-cloud", "name": "Cloud", "color": "#34A853" },
+  { "id": "track-web", "name": "Web", "color": "#F9AB00" },
+  { "id": "track-mobile", "name": "Mobile", "color": "#EA4335" },
+  { "id": "track-community", "name": "Community & Career", "color": "#9334E6" }
+]

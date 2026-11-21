@@ -1,0 +1,23 @@
+{
+  "name": "devfest-2026-server",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Express + JSON-file API for the DevFest 2026 demo application",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "dev": "node --watch server.js",
+    "start": "node server.js",
+    "hash-password": "node scripts/hash-password.js",
+    "test": "node --test test/"
+  },
+  "engines": { "node": ">=18" },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-rate-limit": "^7.4.0",
+    "jsonwebtoken": "^9.0.2"
+  }
+}

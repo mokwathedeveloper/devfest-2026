@@ -1,0 +1,202 @@
+[
+  {
+    "id": "session-001",
+    "title": "Opening Keynote: The Future of Developer Communities",
+    "description": "Kick off DevFest 2026 with a look at how developer communities are evolving, and how you can get involved.",
+    "speakerIds": [
+      "speaker-008"
+    ],
+    "date": "2026-12-05",
+    "startTime": "09:00",
+    "endTime": "09:45",
+    "room": "Main Hall",
+    "track": "Community & Career",
+    "type": "Keynote"
+  },
+  {
+    "id": "session-002",
+    "title": "Building AI-Powered Applications",
+    "description": "An introduction to building modern applications with artificial intelligence: prompting, tool use, evaluation and shipping to production.",
+    "speakerIds": [
+      "speaker-001"
+    ],
+    "date": "2026-12-05",
+    "startTime": "10:00",
+    "endTime": "11:00",
+    "room": "Main Hall",
+    "track": "Artificial Intelligence",
+    "type": "Technical Talk"
+  },
+  {
+    "id": "session-003",
+    "title": "Modern Web Performance",
+    "description": "Practical techniques for improving Core Web Vitals: from image delivery to JavaScript budgets and render-blocking resources.",
+    "speakerIds": [
+      "speaker-004"
+    ],
+    "date": "2026-12-05",
+    "startTime": "10:00",
+    "endTime": "11:00",
+    "room": "Room A",
+    "track": "Web",
+    "type": "Technical Talk"
+  },
+  {
+    "id": "session-004",
+    "title": "One Team, Two Platforms: Flutter & Kotlin",
+    "description": "How to decide between Flutter and native Kotlin, and how to share code and design across platforms.",
+    "speakerIds": [
+      "speaker-005"
+    ],
+    "date": "2026-12-05",
+    "startTime": "10:00",
+    "endTime": "11:00",
+    "room": "Room B",
+    "track": "Mobile",
+    "type": "Technical Talk"
+  },
+  {
+    "id": "session-005",
+    "title": "Serverless on the Cloud",
+    "description": "Design patterns for event-driven, scalable serverless apps and the pitfalls to avoid when going to production.",
+    "speakerIds": [
+      "speaker-002"
+    ],
+    "date": "2026-12-05",
+    "startTime": "11:15",
+    "endTime": "12:15",
+    "room": "Main Hall",
+    "track": "Cloud",
+    "type": "Technical Talk"
+  },
+  {
+    "id": "session-006",
+    "title": "Agents in Production",
+    "description": "What breaks when LLM agents meet real users, and how to add guardrails, tracing and evaluations.",
+    "speakerIds": [
+      "speaker-003"
+    ],
+    "date": "2026-12-05",
+    "startTime": "11:15",
+    "endTime": "12:15",
+    "room": "Room A",
+    "track": "Artificial Intelligence",
+    "type": "Technical Talk"
+  },
+  {
+    "id": "session-007",
+    "title": "Workshop: Build a RAG Chatbot",
+    "description": "A hands-on workshop: build a retrieval-augmented chatbot from scratch. Bring a laptop.",
+    "speakerIds": [
+      "speaker-001",
+      "speaker-003"
+    ],
+    "date": "2026-12-05",
+    "startTime": "13:30",
+    "endTime": "15:30",
+    "room": "Workshop Lab",
+    "track": "Artificial Intelligence",
+    "type": "Workshop"
+  },
+  {
+    "id": "session-008",
+    "title": "Kubernetes Without Tears",
+    "description": "A pragmatic tour of Kubernetes for application developers: what to learn, what to skip and what to automate.",
+    "speakerIds": [
+      "speaker-006"
+    ],
+    "date": "2026-12-05",
+    "startTime": "13:30",
+    "endTime": "14:30",
+    "room": "Main Hall",
+    "track": "Cloud",
+    "type": "Technical Talk"
+  },
+  {
+    "id": "session-009",
+    "title": "Accessible by Default",
+    "description": "Make accessibility part of your design system and CI pipeline so it stops being an afterthought.",
+    "speakerIds": [
+      "speaker-007"
+    ],
+    "date": "2026-12-05",
+    "startTime": "14:45",
+    "endTime": "15:45",
+    "room": "Room A",
+    "track": "Web",
+    "type": "Technical Talk"
+  },
+  {
+    "id": "session-010",
+    "title": "Keynote: Sustaining Open Source",
+    "description": "Why open source projects burn out and what communities and companies can do about it.",
+    "speakerIds": [
+      "speaker-008"
+    ],
+    "date": "2026-12-06",
+    "startTime": "09:30",
+    "endTime": "10:30",
+    "room": "Main Hall",
+    "track": "Community & Career",
+    "type": "Keynote"
+  },
+  {
+    "id": "session-011",
+    "title": "Designing for On-Device AI",
+    "description": "Latency, privacy and battery: building mobile experiences powered by on-device machine learning.",
+    "speakerIds": [
+      "speaker-005"
+    ],
+    "date": "2026-12-06",
+    "startTime": "10:45",
+    "endTime": "11:45",
+    "room": "Room A",
+    "track": "Mobile",
+    "type": "Technical Talk"
+  },
+  {
+    "id": "session-012",
+    "title": "Panel: Careers in Tech",
+    "description": "Three engineers share how they built their careers, switched specialties and kept learning.",
+    "speakerIds": [
+      "speaker-002",
+      "speaker-006",
+      "speaker-007"
+    ],
+    "date": "2026-12-06",
+    "startTime": "10:45",
+    "endTime": "11:45",
+    "room": "Room B",
+    "track": "Community & Career",
+    "type": "Panel"
+  },
+  {
+    "id": "session-013",
+    "title": "Workshop: Deploy Full-Stack Apps to Cloud Run",
+    "description": "Containerize and deploy a React + Node application to a serverless container platform.",
+    "speakerIds": [
+      "speaker-002"
+    ],
+    "date": "2026-12-06",
+    "startTime": "12:30",
+    "endTime": "14:30",
+    "room": "Workshop Lab",
+    "track": "Cloud",
+    "type": "Workshop"
+  },
+  {
+    "id": "session-014",
+    "title": "Closing & Lightning Talks",
+    "description": "Fast five-minute talks from the community followed by closing remarks.",
+    "speakerIds": [
+      "speaker-004",
+      "speaker-007"
+    ],
+    "date": "2026-12-06",
+    "startTime": "14:45",
+    "endTime": "15:30",
+    "room": "Main Hall",
+    "track": "Community & Career",
+    "type": "Lightning Talks"
+  }
+]
