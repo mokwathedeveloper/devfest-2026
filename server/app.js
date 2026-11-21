@@ -6,6 +6,7 @@ import { errorHandler, notFoundHandler } from './middleware/errorHandler.js';
 
 export function createApp() {
   const app = express();
+  if (process.env.VERCEL) app.set('trust proxy', 1); // correct client IPs for the login rate limiter behind Vercel's proxy
   const origins = (process.env.CORS_ORIGIN || 'http://localhost:5173').split(',').map((s) => s.trim());
   app.use(cors({ origin: origins }));
   app.use(express.json({ limit: '100kb' }));
