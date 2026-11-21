@@ -1,3 +1,4 @@
+/** Fallback for unknown URLs. */
 import { Link } from 'react-router-dom';
 import { Compass } from 'lucide-react';
 import { EmptyState } from '../components/States.jsx';

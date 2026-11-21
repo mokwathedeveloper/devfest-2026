@@ -1,3 +1,4 @@
+/** Track name with its colour marker; the colour comes from tracks.json via useEvent(), never hard-coded. */
 import { useEvent } from '../hooks/useEvent.jsx';
 
 export default function TrackBadge({ track }) {

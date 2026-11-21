@@ -4,7 +4,10 @@ import { useFetch } from './useFetch.js';
 
 const Ctx = createContext(null);
 
-/** Loads event info + tracks once for the whole app (header, footer, colours). */
+/**
+ * Loads event info + tracks once for the whole app (banner, footer, hero, track colours).
+ * Use `useEvent()` anywhere; call `reload()` after the admin edits the event so every page updates.
+ */
 export function EventProvider({ children }) {
   const ev = useFetch(() => Promise.all([api.getEvent(), api.getTracks()]), []);
   const [event, tracks] = ev.data || [null, []];

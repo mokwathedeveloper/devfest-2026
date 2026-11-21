@@ -1,3 +1,4 @@
+/** Top navigation (responsive: collapses to a menu on phones). Shows how many sessions are saved. */
 import { useEffect, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';

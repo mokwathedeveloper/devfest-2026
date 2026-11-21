@@ -1,3 +1,4 @@
+/** Full agenda grouped by day, with filters (day, time of day, speaker, track, room) applied in the browser. */
 import { useMemo, useState } from 'react';
 import { CalendarX, FilterX } from 'lucide-react';
 import { api } from '../services/api.js';
@@ -34,6 +35,7 @@ export default function Schedule() {
   const days = [...new Set(sessions.map((s) => s.date))].sort();
   const rooms = event?.rooms || [...new Set(sessions.map((s) => s.room))];
 
+  // Filtering happens in the browser: the whole agenda is small, so one request and instant filter changes.
   const filtered = useMemo(() => sortSessions(sessions).filter((s) =>
     (!f.day || s.date === f.day) && (!f.time || timeOfDay(s.startTime) === f.time) &&
     (!f.speaker || s.speakerIds.includes(f.speaker)) && (!f.track || s.track === f.track) && (!f.room || s.room === f.room),

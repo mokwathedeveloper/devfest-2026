@@ -1,3 +1,4 @@
+/** Speaker preview card (whole card is one link via a stretched ::after) and the shared SocialLinks list. */
 import { Link } from 'react-router-dom';
 import { Github, Linkedin, Twitter } from 'lucide-react';
 import Avatar from './Avatar.jsx';

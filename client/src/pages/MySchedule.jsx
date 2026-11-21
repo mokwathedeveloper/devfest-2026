@@ -1,3 +1,7 @@
+/**
+ * The attendee's saved sessions (IDs live in localStorage; details are looked up from the API).
+ * Warns about overlapping sessions, tolerates sessions an organizer deleted since saving, and exports to calendar.
+ */
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { AlertTriangle, CalendarHeart, Download, Trash2 } from 'lucide-react';
@@ -21,7 +25,9 @@ export default function MySchedule() {
   const [sessions = [], speakers = []] = data || [];
 
   const mine = sortSessions(sessions.filter((s) => ids.includes(s.id)));
+  // Saved IDs are only kept in the browser, so an organizer may have deleted a session since it was saved.
   const staleCount = ids.length - mine.length; // saved IDs whose session no longer exists
+  // Pairs of saved sessions that overlap in time; drives the warning banner and the red highlight.
   const conflicts = findConflicts(mine);
   const conflictIds = new Set(conflicts.flat().map((s) => s.id));
   const speakersOf = (s) => s.speakerIds.map((id) => speakers.find((x) => x.id === id)).filter(Boolean);

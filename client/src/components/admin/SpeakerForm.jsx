@@ -1,3 +1,4 @@
+/** Add/edit speaker form (admin). Uploads the photo first, then stores the returned URL in the speaker record. */
 import { useRef, useState } from 'react';
 import { Upload, X } from 'lucide-react';
 import FormField from '../FormField.jsx';

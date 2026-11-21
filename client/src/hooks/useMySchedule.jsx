@@ -10,7 +10,11 @@ function load() {
   } catch { return []; }
 }
 
-/** Bookmarked session IDs, persisted in localStorage (no login needed). */
+/**
+ * The attendee's saved sessions: a list of session IDs persisted in localStorage (no login needed).
+ * Only IDs are stored; session details are fetched fresh, so organizer edits show up and deleted sessions can be detected.
+ * Storage access is wrapped in try/catch because it throws in some private-browsing modes.
+ */
 export function MyScheduleProvider({ children }) {
   const [ids, setIds] = useState(load);
   useEffect(() => {

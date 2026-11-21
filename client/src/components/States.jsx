@@ -1,3 +1,4 @@
+/** Shared loading / error / empty states so every page handles these cases the same way. */
 import { AlertTriangle, Inbox, Loader2 } from 'lucide-react';
 
 export function Loading({ label = 'Loading…' }) {

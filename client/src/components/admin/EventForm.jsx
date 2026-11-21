@@ -1,3 +1,4 @@
+/** Edit the event information (name, dates, venue, rooms, session types). */
 import { useState } from 'react';
 import { CheckCircle2 } from 'lucide-react';
 import FormField from '../FormField.jsx';

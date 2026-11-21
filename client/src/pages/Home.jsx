@@ -1,3 +1,4 @@
+/** Landing page: hero, program grid, summary line, featured speakers and sessions. All content comes from the API. */
 import { Link } from 'react-router-dom';
 import { api } from '../services/api.js';
 import { useFetch } from '../hooks/useFetch.js';

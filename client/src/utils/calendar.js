@@ -72,6 +72,7 @@ export function downloadIcs(filename, text) {
 
 const KEY = 'devfest2026.reminderMinutes';
 export const REMINDER_OPTIONS = [[0, 'No reminder'], [10, '10 minutes before'], [15, '15 minutes before'], [30, '30 minutes before'], [60, '1 hour before'], [1440, '1 day before']];
+/** The attendee's preferred reminder (minutes before start), remembered in localStorage. Defaults to 15. */
 export function getReminder() {
   try { const v = Number(localStorage.getItem(KEY)); return REMINDER_OPTIONS.some(([m]) => m === v) && localStorage.getItem(KEY) !== null ? v : 15; } catch { return 15; }
 }

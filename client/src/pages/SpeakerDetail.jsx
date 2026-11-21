@@ -1,3 +1,4 @@
+/** One speaker's profile and their sessions. Shows a friendly message if the ID doesn't exist (404). */
 import { Link, useParams } from 'react-router-dom';
 import { ArrowLeft, UserX } from 'lucide-react';
 import { api } from '../services/api.js';

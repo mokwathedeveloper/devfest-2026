@@ -1,3 +1,4 @@
+/** One session: description, speakers, facts, and Save + Add-to-calendar actions. Handles a missing session (404). */
 import { Link, useParams } from 'react-router-dom';
 import { ArrowLeft, CalendarDays, Clock, MapPin, Tag, CalendarX } from 'lucide-react';
 import { api } from '../services/api.js';

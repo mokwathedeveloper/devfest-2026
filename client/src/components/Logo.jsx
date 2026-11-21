@@ -1,3 +1,4 @@
+/** The </> brand mark (inline SVG so it needs no extra request). */
 export default function Logo({ className = 'h-9 w-9' }) {
   return (
     <svg viewBox="0 0 64 64" className={className} aria-hidden="true" fill="none" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round">

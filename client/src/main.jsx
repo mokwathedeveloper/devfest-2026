@@ -1,3 +1,7 @@
+/**
+ * React entry point. The providers wrap the whole app and are ordered by dependency:
+ *   Router → Event (event info + tracks) → MySchedule (saved sessions) → Auth (admin session) → App
+ */
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';

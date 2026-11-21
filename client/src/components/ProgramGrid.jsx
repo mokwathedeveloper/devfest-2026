@@ -3,9 +3,13 @@ import { Link } from 'react-router-dom';
 import { useEvent } from '../hooks/useEvent.jsx';
 import { formatDate, formatTime, toMinutes } from '../utils/time.js';
 
+/** Vertical scale: pixels per minute. A session's block height and top offset are simply minutes × this. */
 const PX_PER_MIN = 1.3;
 
-/** The programme at a glance: rooms across, time down. Built entirely from API data. */
+/**
+ * The programme at a glance: rooms across, time down, one coloured block per session.
+ * Built entirely from API data. Wide screens get the grid; phones get a simple list (rooms don't fit side by side).
+ */
 export default function ProgramGrid({ sessions, speakers }) {
   const { event, trackColor } = useEvent();
   const days = useMemo(() => [...new Set(sessions.map((s) => s.date))].sort(), [sessions]);
@@ -15,6 +19,7 @@ export default function ProgramGrid({ sessions, speakers }) {
   if (!days.length) return null;
 
   const rooms = event.rooms;
+  // Visible time window: from the earliest start to the latest end of the selected day, rounded out to whole hours.
   const first = Math.floor(Math.min(...list.map((s) => toMinutes(s.startTime))) / 60) * 60;
   const last = Math.ceil(Math.max(...list.map((s) => toMinutes(s.endTime))) / 60) * 60;
   const height = (last - first) * PX_PER_MIN;

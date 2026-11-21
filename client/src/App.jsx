@@ -1,3 +1,4 @@
+/** App shell (banner, navigation, footer) and the route table. Add new pages here. */
 import { Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar.jsx';
 import Footer from './components/Footer.jsx';

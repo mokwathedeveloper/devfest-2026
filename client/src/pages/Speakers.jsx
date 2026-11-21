@@ -1,3 +1,4 @@
+/** Speaker directory with live search over name, organization, title and expertise. */
 import { useMemo, useState } from 'react';
 import { Search, UserX } from 'lucide-react';
 import { api } from '../services/api.js';

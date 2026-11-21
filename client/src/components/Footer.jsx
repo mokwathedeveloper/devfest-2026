@@ -1,3 +1,4 @@
+/** Site footer: quick links and venue/date, read from the event data. */
 import { Link } from 'react-router-dom';
 import Logo from './Logo.jsx';
 import { useEvent } from '../hooks/useEvent.jsx';

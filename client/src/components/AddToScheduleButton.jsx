@@ -1,3 +1,4 @@
+/** Save / unsave a session in "My schedule" (stored in the browser by useMySchedule). */
 import { Plus, Check } from 'lucide-react';
 import { useMySchedule } from '../hooks/useMySchedule.jsx';
 

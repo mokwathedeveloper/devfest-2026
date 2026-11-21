@@ -6,7 +6,13 @@ import CalendarMenu from './CalendarMenu.jsx';
 import { useEvent } from '../hooks/useEvent.jsx';
 import { formatTime } from '../utils/time.js';
 
-/** Agenda row, styled like a line in a printed programme. */
+/**
+ * One session row.
+ * @param speakers   resolved speaker objects (the page looks them up; may be shorter than speakerIds if data is missing)
+ * @param onRemove   when given, shows Remove + calendar actions (My Schedule) instead of Save
+ * @param conflict   highlights the row when it overlaps another saved session
+ * @param showDate   shows the date too (for lists that mix days)
+ */
 export default function SessionCard({ session, speakers = [], onRemove, conflict = false, showDate = false }) {
   const { trackColor } = useEvent();
   const names = speakers.length ? speakers.map((s) => s.name).join(' · ') : 'Speaker to be announced';

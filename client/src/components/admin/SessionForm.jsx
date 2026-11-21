@@ -1,3 +1,4 @@
+/** Add/edit session form (admin). Quick client-side time check; the server re-validates and checks clashes. */
 import { useState } from 'react';
 import FormField from '../FormField.jsx';
 import { toMinutes } from '../../utils/time.js';

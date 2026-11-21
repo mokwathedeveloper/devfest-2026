@@ -3,7 +3,7 @@ import { initials } from '../utils/time.js';
 
 const COLORS = ['#3F7BEA', '#2F9A5B', '#E2493B', '#F2B01E', '#9A5CC6', '#2BA6B8'];
 
-/** Speaker photo with graceful fallback to initials on a flat colour. */
+/** Speaker photo. Falls back to initials on a name-derived colour if there is no photo or the image fails to load. */
 export default function Avatar({ name, src, className = 'h-16 w-16', rounded = 'rounded-full' }) {
   const [failed, setFailed] = useState(false);
   const color = COLORS[[...name].reduce((a, c) => a + c.charCodeAt(0), 0) % COLORS.length];

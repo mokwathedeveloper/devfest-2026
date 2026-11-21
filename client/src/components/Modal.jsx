@@ -1,3 +1,4 @@
+/** Accessible dialog: focus moves into it, Escape and outside-click close it, focus returns afterwards. */
 import { useEffect, useRef } from 'react';
 import { X } from 'lucide-react';
 

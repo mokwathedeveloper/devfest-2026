@@ -1,3 +1,4 @@
+/** Label + input wrapper that also shows a field's hint or validation error (used by the admin forms). */
 export default function FormField({ label, error, hint, htmlFor, children }) {
   return (
     <div>

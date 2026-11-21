@@ -1,3 +1,4 @@
+/** Admin login state shared across the app. Components call `useAuth()` for { authed, login, logout }. */
 import { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import { api, tokenStore } from '../services/api.js';
 
@@ -11,6 +12,7 @@ export function AuthProvider({ children }) {
     if (!tokenStore.get()) return;
     api.verify().then(() => setAuthed(true)).catch(() => tokenStore.clear()).finally(() => setChecking(false));
   }, []);
+  // Any admin request that gets a 401 (token expired/invalid) fires this window event; we then sign out.
   const logout = useCallback(() => { tokenStore.clear(); setAuthed(false); }, []);
   useEffect(() => {
     window.addEventListener('devfest:unauthorized', logout);

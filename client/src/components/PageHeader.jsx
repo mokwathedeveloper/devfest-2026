@@ -1,3 +1,4 @@
+/** Title + intro block at the top of list pages; children render on the right (e.g. a search box). */
 export default function PageHeader({ title, subtitle, children }) {
   return (
     <header className="border-b border-line">

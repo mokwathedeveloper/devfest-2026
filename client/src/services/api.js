@@ -1,3 +1,8 @@
+/**
+ * The ONLY place the frontend talks to the backend. Components call `api.getSpeakers()` etc. and never use fetch directly.
+ * Failures are normalised into ApiError (message for the user, status code, per-field `details` for forms).
+ * The admin token is kept in sessionStorage, so it is forgotten when the browser tab is closed.
+ */
 const BASE = (import.meta.env.VITE_API_URL || '/api').replace(/\/$/, '');
 const TOKEN_KEY = 'devfest.adminToken';
 
@@ -15,6 +20,10 @@ export const tokenStore = {
   clear: () => { try { sessionStorage.removeItem(TOKEN_KEY); } catch { /* ignore */ } },
 };
 
+/**
+ * Shared fetch wrapper. JSON bodies are serialised for you; pass a File/Blob (with `contentType`) to upload raw bytes.
+ * `auth: true` attaches the admin token; a 401 on an authed call signs the admin out via a window event.
+ */
 async function request(path, { method = 'GET', body, auth = false, contentType } = {}) {
   const headers = {};
   const isFile = typeof Blob !== 'undefined' && body instanceof Blob;

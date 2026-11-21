@@ -1,3 +1,4 @@
+/** Thin banner shown while event.isDemo is true, so sample data is never mistaken for real data. */
 import { useEvent } from '../hooks/useEvent.jsx';
 
 export default function DemoBanner() {

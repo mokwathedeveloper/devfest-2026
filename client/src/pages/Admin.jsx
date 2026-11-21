@@ -1,3 +1,7 @@
+/**
+ * Organizer area: password login, then tabs to manage speakers, sessions and event info.
+ * Every change goes through the API (which re-validates and saves); this page just reloads the lists afterwards.
+ */
 import { useState } from 'react';
 import { LogOut, Lock, Pencil, Plus, Trash2, Mic, Layers, Settings } from 'lucide-react';
 import { api } from '../services/api.js';
@@ -15,6 +19,7 @@ import SessionForm from '../components/admin/SessionForm.jsx';
 import EventForm from '../components/admin/EventForm.jsx';
 import { ErrorState, Loading } from '../components/States.jsx';
 
+/** Password form shown until the admin is signed in. */
 function Login() {
   const { login } = useAuth();
   const [pw, setPw] = useState('');
@@ -38,6 +43,7 @@ function Login() {
   );
 }
 
+/** Speakers tab: list with edit/delete; the add/edit form opens in a modal. `reload` refetches after any change. */
 function SpeakersTab({ speakers, reload }) {
   const [editing, setEditing] = useState(null); // null | 'new' | speaker
   const [error, setError] = useState('');
@@ -70,6 +76,7 @@ function SpeakersTab({ speakers, reload }) {
   );
 }
 
+/** Sessions tab. Server-side rules (room/speaker clashes, valid times) surface here as error messages from the API. */
 function SessionsTab({ sessions, speakers, reload }) {
   const { event, tracks } = useEvent();
   const [editing, setEditing] = useState(null);
@@ -107,6 +114,7 @@ function SessionsTab({ sessions, speakers, reload }) {
   );
 }
 
+/** Signed-in view: tabs for speakers, sessions and event info. */
 function Dashboard() {
   useDocumentTitle('Admin');
   const { logout } = useAuth();
