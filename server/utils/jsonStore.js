@@ -31,7 +31,8 @@ async function readBundled(name) {
 async function fetchBlob(name) {
   const res = await get(blobPath(name), { access: 'public', useCache: false });
   if (!res || res.statusCode !== 200) return null;
-  return { data: JSON.parse(await new Response(res.stream).text()), etag: res.blob.etag };
+  // Large bodies are served compressed with a weak ETag (W/"…"); conditional writes need the strong form.
+  return { data: JSON.parse(await new Response(res.stream).text()), etag: res.blob.etag?.replace(/^W\//, '') };
 }
 
 async function readBlob(name) {

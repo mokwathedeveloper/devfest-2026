@@ -8,3 +8,5 @@ server/uploads/
 *.log
 *.tmp
 .DS_Store
+.vercel
+.env*.local
