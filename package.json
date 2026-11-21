@@ -1,0 +1,18 @@
+{
+  "name": "devfest-2026",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Root manifest used by Vercel to install the API dependencies. For local development use server/ and client/ directly.",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@vercel/blob": "^2.9.0",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "express-rate-limit": "^7.4.0",
+    "jsonwebtoken": "^9.0.2"
+  }
+}
