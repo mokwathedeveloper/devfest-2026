@@ -100,6 +100,55 @@ Photos are stored in the same Blob store and referenced by absolute URL. The log
 cd server && npm test   # API, auth, validation and concurrency tests (uses a temp copy of the data)
 ```
 
+## For developers
+
+### Code tour
+
+```
+client/src/
+  main.jsx            providers (Router → Event → MySchedule → Auth) wrapping <App/>
+  App.jsx             page shell + route table (add new pages here)
+  pages/              one file per screen; they fetch data and compose components
+  components/         reusable UI (cards, forms, states); components/admin/ holds the admin forms
+  hooks/              useFetch (loading/error/reload), useEvent, useMySchedule, useAuth
+  services/api.js     the ONLY place that calls the backend
+  utils/              time.js (date/time + overlap logic), calendar.js (.ics / Google Calendar)
+
+server/
+  server.js           local entry point (loads .env, listens)      api/index.js = Vercel entry point
+  app.js              builds the Express app (CORS, body parsing, routes, error handling)
+  routes/index.js     the endpoint table: what is public, what needs admin
+  controllers/        request handlers: validate → withLock(read, change, write) → respond
+  middleware/         auth.js (JWT check), errorHandler.js (consistent JSON errors)
+  utils/              validators.js (all input rules), jsonStore.js (the "database"), errors.js, ids.js
+  data/*.json         sample data; also the seed for Blob storage
+  test/               API tests (npm test)
+```
+
+### How a request flows
+
+`Page → api.js → /api route → requireAdmin (writes only) → controller → validators → jsonStore (inside withLock) → JSON response`.
+Any thrown `HttpError` becomes `{ "error": "...", "details": { field: "message" } }`, and the forms show those per-field messages.
+
+### Conventions
+
+- **No event data in components.** Names, dates, rooms, track colours and so on come from the API, so organizers can change them without code changes.
+- **Validate on the server.** Client checks are only for faster feedback; `server/utils/validators.js` is the source of truth. Two rules are deliberately duplicated and must stay in sync: session overlap (`validators.js` and `client/src/utils/time.js`).
+- **Writes go through `withLock`.** Never read-modify-write a data file outside it.
+- **Handle the three states** (loading, error, empty) on every page: use the components in `components/States.jsx`.
+- **Comments explain why**, not what. Each file starts with a short header saying what it is for.
+
+### Common changes
+
+- **Add a field to speakers** (e.g. `pronouns`): add the rule in `validateSpeaker` (`server/utils/validators.js`) → add the input in `components/admin/SpeakerForm.jsx` → show it in `SpeakerCard.jsx` / `SpeakerDetail.jsx`. Existing records without the field keep working if you treat it as optional.
+- **Add an endpoint:** write the handler in a controller, register it in `routes/index.js` (add `requireAdmin` for writes), add a method to `client/src/services/api.js`, and add a test in `server/test/api.test.js`.
+- **Add a page:** create it in `pages/`, add a `<Route>` in `App.jsx`, link it from `Navbar.jsx`.
+- **Change colours/fonts:** design tokens are in `client/tailwind.config.js` (palette, fonts) and `client/src/index.css` (buttons, cards, inputs).
+
+### Commit messages
+
+Use [Conventional Commits](https://www.conventionalcommits.org/): `type(scope): summary`, for example `feat(client): add calendar reminders`, `fix(server): reject overlapping sessions`. Types used here: `feat`, `fix`, `docs`, `test`, `build`, `chore`, `refactor`. Explain the *why* in the body when it isn't obvious, and keep each commit to one logical change.
+
 ## Structure
 
 ```
