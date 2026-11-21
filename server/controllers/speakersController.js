@@ -1,3 +1,10 @@
+/**
+ * Speaker CRUD. Pattern used by all write handlers:
+ *   1. validate the request body (400 with per-field messages)
+ *   2. inside withLock(): read the file, apply the change, write it back (so concurrent requests can't interleave)
+ *   3. respond with the saved record
+ * Deleting a speaker who is still assigned to a session is refused (409) so sessions never point at nobody.
+ */
 import { readJson, writeJson, withLock } from '../utils/jsonStore.js';
 import { validateSpeaker } from '../utils/validators.js';
 import { badRequest, notFound, conflict } from '../utils/errors.js';
@@ -44,6 +51,7 @@ export async function updateSpeaker(req, res, next) {
       const oldPhoto = speakers[i].photo;
       speakers[i] = { id: speakers[i].id, ...value };
       await writeJson('speakers', speakers);
+      // Clean up the replaced photo file, but only if no other speaker still uses it.
       if (oldPhoto !== value.photo && !speakers.some((x) => x.photo === oldPhoto)) await removeUpload(oldPhoto);
       return speakers[i];
     });

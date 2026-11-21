@@ -1,3 +1,7 @@
+/**
+ * Helper for creating ADMIN_PASSWORD_HASH:  npm run hash-password -- "your password"
+ * Prints a ready-to-paste line for server/.env (single quotes are required because bcrypt hashes contain "$").
+ */
 import bcrypt from 'bcryptjs';
 
 const password = process.argv[2];

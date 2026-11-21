@@ -1,3 +1,9 @@
+/**
+ * The "database": reads and writes the JSON data files. Two interchangeable backends behind the same API:
+ *   - local files in server/data (development)
+ *   - Vercel Blob (production on Vercel, where the filesystem is read-only), chosen when BLOB_READ_WRITE_TOKEN is set
+ * Always use `withLock` around read→modify→write sequences; see the notes on each backend below.
+ */
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 import { AsyncLocalStorage } from 'node:async_hooks';

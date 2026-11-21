@@ -1,3 +1,9 @@
+/**
+ * Builds the Express application (no listening here, so it is reusable by tests and by the Vercel function).
+ *
+ * Request flow:  CORS → JSON body parser → /uploads (local files only) → /api routes → 404 handler → error handler.
+ * Every controller reports failures with `next(err)`; middleware/errorHandler.js turns them into JSON responses.
+ */
 import express from 'express';
 import cors from 'cors';
 import routes from './routes/index.js';

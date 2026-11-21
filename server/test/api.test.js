@@ -1,3 +1,7 @@
+/**
+ * API tests (run with `npm test`). They start the real app on a random port against a throw-away copy of the data
+ * directory, so they never touch your real data or uploads. Covers auth, validation, conflicts, uploads, concurrency.
+ */
 import { test, before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';

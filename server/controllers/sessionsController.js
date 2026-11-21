@@ -1,3 +1,8 @@
+/**
+ * Session CRUD. Besides field validation (utils/validators.js) a session must make sense in context:
+ * speakers/track/room/type must exist, the date must fall inside the event, and neither the room nor any
+ * speaker may be double-booked. Field problems are 400 (fix your input); clashes with other data are 409.
+ */
 import { readJson, writeJson, withLock } from '../utils/jsonStore.js';
 import { validateSession, overlaps } from '../utils/validators.js';
 import { badRequest, notFound, conflict } from '../utils/errors.js';
@@ -40,6 +45,8 @@ export async function getSession(req, res, next) {
 
 export async function createSession(req, res, next) {
   try {
+    // 1) Cheap field validation first (no I/O). 2) Context checks and the write happen together inside the lock,
+    // so two admins can't both book the same room at the same time.
     const { value, errors } = validateSession(req.body);
     if (errors) throw badRequest('Invalid session data.', errors);
     const created = await withLock(async () => {
@@ -62,6 +69,7 @@ export async function updateSession(req, res, next) {
       const sessions = await readJson('sessions');
       const i = sessions.findIndex((s) => s.id === req.params.id);
       if (i === -1) throw notFound(`Session "${req.params.id}" was not found.`);
+      // `req.params.id` is passed so a session isn't reported as clashing with its own previous time slot.
       await checkReferences(value, sessions, req.params.id);
       sessions[i] = { id: sessions[i].id, ...value };
       await writeJson('sessions', sessions);

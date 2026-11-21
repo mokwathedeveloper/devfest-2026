@@ -1,3 +1,4 @@
+/** Sequential, human-readable IDs ("speaker-009") derived from the highest existing number. */
 /** Generate the next sequential ID such as "speaker-009". */
 export function nextId(prefix, items) {
   const max = items.reduce((m, it) => {

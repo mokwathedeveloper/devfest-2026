@@ -1,3 +1,7 @@
+/**
+ * Local entry point: loads server/.env, warns about missing admin settings, then starts the HTTP server.
+ * The Express app itself lives in app.js so tests and Vercel (api/index.js) can import it without listening on a port.
+ */
 import 'dotenv/config';
 import { createApp } from './app.js';
 

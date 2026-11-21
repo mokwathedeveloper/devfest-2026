@@ -1,3 +1,8 @@
+/**
+ * Speaker photo upload (admin only). The browser sends the raw image bytes; we identify the real type from the
+ * file's first bytes (magic numbers) instead of trusting the Content-Type header, and only allow JPEG/PNG/WebP
+ * (never SVG, which can carry scripts). Files are stored on disk locally, or in Vercel Blob when deployed.
+ */
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';

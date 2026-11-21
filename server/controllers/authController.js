@@ -1,3 +1,4 @@
+/** Admin login: verifies the password against the bcrypt hash in the environment and returns a signed JWT. */
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { HttpError } from '../utils/errors.js';

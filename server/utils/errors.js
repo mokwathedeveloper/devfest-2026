@@ -1,3 +1,4 @@
+/** HttpError carries an HTTP status so controllers can `throw badRequest(...)` / notFound / conflict. */
 export class HttpError extends Error {
   constructor(status, message, details) {
     super(message);

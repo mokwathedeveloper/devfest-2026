@@ -1,3 +1,8 @@
+/**
+ * Central error handling so every failure is a JSON body shaped { error, details? }.
+ * Controllers throw HttpError (utils/errors.js) for expected problems; anything else becomes a generic 500
+ * (the real error is logged on the server only, never leaked to the client).
+ */
 export function notFoundHandler(req, res) {
   res.status(404).json({ error: `Route not found: ${req.method} ${req.originalUrl}` });
 }

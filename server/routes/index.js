@@ -1,3 +1,10 @@
+/**
+ * The API route table. Read this file first to see every endpoint and who may call it.
+ *
+ *  - Public (anyone):  GET /event, /tracks, /speakers[/:id], /sessions[/:id]
+ *  - Admin only:       every POST / PUT / DELETE, plus /uploads. Protected by `requireAdmin` (JWT bearer token).
+ *  - Login:            POST /auth/login exchanges the admin password for a token; rate limited against guessing.
+ */
 import { Router } from 'express';
 import rateLimit from 'express-rate-limit';
 import { requireAdmin } from '../middleware/auth.js';
@@ -19,11 +26,15 @@ const loginLimiter = rateLimit({
   message: { error: 'Too many login attempts. Please try again in a few minutes.' },
 });
 
+// --- Authentication ---------------------------------------------------------
 router.post('/auth/login', loginLimiter, auth.login);
 router.get('/auth/me', requireAdmin, auth.me);
 
+// --- Photo upload: raw image bytes (not JSON), so a body parser is scoped to just this route.
+// The limit is enforced while reading, so oversized uploads are rejected early (413).
 router.post('/uploads', requireAdmin, express.raw({ type: ['image/jpeg', 'image/png', 'image/webp'], limit: MAX_UPLOAD_BYTES }), uploadPhoto);
 
+// --- Event, tracks, speakers, sessions: GET is public, writes need requireAdmin ---
 router.get('/event', event.getEvent);
 router.put('/event', requireAdmin, event.updateEvent);
 

@@ -1,3 +1,4 @@
+/** Event information (name, dates, venue, rooms, session types). One record, so there is only read and replace. */
 import { readJson, writeJson, withLock } from '../utils/jsonStore.js';
 import { validateEvent } from '../utils/validators.js';
 import { badRequest } from '../utils/errors.js';

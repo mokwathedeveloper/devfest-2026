@@ -1,24 +1,38 @@
+/**
+ * Input validation for every write endpoint. Each validateX(body) returns either { value } (trimmed and normalised,
+ * safe to store) or { errors } (a map of field name → human-readable message, sent back to the form).
+ * Checks that need other data (does this speaker exist? is the room free?) live in the controllers instead.
+ */
 const TIME_RE = /^([01]\d|2[0-3]):[0-5]\d$/;
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 
+/** True for a string that has visible characters after trimming and is at most `max` long. */
 export const isNonEmptyString = (v, max = 500) =>
   typeof v === 'string' && v.trim().length > 0 && v.trim().length <= max;
 
+/** Strict YYYY-MM-DD check. Round-tripping through Date rejects impossible dates such as 2026-02-31. */
 export function isValidDate(v) {
   if (typeof v !== 'string' || !DATE_RE.test(v)) return false;
   const d = new Date(`${v}T00:00:00Z`);
   return !Number.isNaN(d.getTime()) && d.toISOString().slice(0, 10) === v;
 }
+/** 24-hour "HH:MM" (00:00 to 23:59). */
 export const isValidTime = (v) => typeof v === 'string' && TIME_RE.test(v);
+/** "09:30" → 570. Comparing minutes avoids string-comparison surprises. */
 export const toMinutes = (t) => {
   const [h, m] = t.split(':').map(Number);
   return h * 60 + m;
 };
+/**
+ * Do two sessions overlap in time? Back-to-back sessions (one ends at 10:00, the next starts at 10:00)
+ * do NOT overlap. Keep in sync with sessionsOverlap() in client/src/utils/time.js.
+ */
 export const overlaps = (a, b) =>
   a.date === b.date &&
   toMinutes(a.startTime) < toMinutes(b.endTime) &&
   toMinutes(b.startTime) < toMinutes(a.endTime);
 
+/** Empty is allowed (optional link); otherwise it must be a valid http(s) URL, which blocks javascript: links. */
 const isHttpUrlOrEmpty = (v) => {
   if (v === undefined || v === null || v === '') return true;
   if (typeof v !== 'string' || v.length > 300) return false;
@@ -29,13 +43,17 @@ const isHttpUrlOrEmpty = (v) => {
     return false;
   }
 };
+/** A photo is either a site path ("/uploads/x.png") or an http(s) URL. "//host" is rejected: it would be a protocol-relative URL. */
 const isPhoto = (v) =>
   v === undefined || v === '' || (typeof v === 'string' && v.length <= 300 && (v.startsWith('/') || isHttpUrlOrEmpty(v)) && !v.startsWith('//'));
 
 const strList = (v, maxItems = 20) =>
   Array.isArray(v) && v.length <= maxItems && v.every((x) => isNonEmptyString(x, 60));
 
-/** Validate + normalise a speaker payload. Returns { value, errors }. */
+/**
+ * Validate + normalise a speaker payload.
+ * @returns {{ value?: object, errors?: Record<string,string> }} exactly one of the two is set
+ */
 export function validateSpeaker(body) {
   const errors = {};
   const b = body && typeof body === 'object' ? body : {};
@@ -70,7 +88,11 @@ export function validateSpeaker(body) {
   };
 }
 
-/** Validate + normalise a session payload. Referential checks happen in the controller. */
+/**
+ * Validate + normalise a session payload (shape, formats, and end-after-start).
+ * Whether the speakers/track/room exist, and whether the room or a speaker is already booked,
+ * needs other data, so sessionsController.checkReferences() does that part.
+ */
 export function validateSession(body) {
   const errors = {};
   const b = body && typeof body === 'object' ? body : {};
@@ -103,6 +125,7 @@ export function validateSession(body) {
   };
 }
 
+/** Validate + normalise the event information record. */
 export function validateEvent(body) {
   const errors = {};
   const b = body && typeof body === 'object' ? body : {};
