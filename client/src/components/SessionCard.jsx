@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { MapPin, Trash2 } from 'lucide-react';
 import TrackBadge from './TrackBadge.jsx';
 import AddToScheduleButton from './AddToScheduleButton.jsx';
+import CalendarMenu from './CalendarMenu.jsx';
 import { useEvent } from '../hooks/useEvent.jsx';
 import { formatTime } from '../utils/time.js';
 
@@ -30,7 +31,10 @@ export default function SessionCard({ session, speakers = [], onRemove, conflict
       </div>
       <div className="relative z-10 sm:self-start">
         {onRemove ? (
-          <button onClick={() => onRemove(session.id)} className="btn-outline !py-1.5 !text-xs" aria-label={`Remove ${session.title} from my schedule`}><Trash2 className="h-3.5 w-3.5" aria-hidden="true" />Remove</button>
+          <div className="flex flex-col items-stretch gap-2 sm:items-end">
+            <CalendarMenu session={session} speakers={speakers} compact />
+            <button onClick={() => onRemove(session.id)} className="btn-outline !py-1.5 !text-xs" aria-label={`Remove ${session.title} from my schedule`}><Trash2 className="h-3.5 w-3.5" aria-hidden="true" />Remove</button>
+          </div>
         ) : <AddToScheduleButton sessionId={session.id} compact />}
       </div>
     </article>

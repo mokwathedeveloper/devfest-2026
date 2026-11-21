@@ -1,5 +1,8 @@
 import { Link } from 'react-router-dom';
-import { AlertTriangle, CalendarHeart, Trash2 } from 'lucide-react';
+import { useState } from 'react';
+import { AlertTriangle, CalendarHeart, Download, Trash2 } from 'lucide-react';
+import { useEvent } from '../hooks/useEvent.jsx';
+import { buildIcs, downloadIcs, getReminder, setReminder, REMINDER_OPTIONS } from '../utils/calendar.js';
 import { api } from '../services/api.js';
 import { useFetch } from '../hooks/useFetch.js';
 import { useMySchedule } from '../hooks/useMySchedule.jsx';
@@ -12,6 +15,8 @@ import { EmptyState, ErrorState, SkeletonGrid } from '../components/States.jsx';
 export default function MySchedule() {
   useDocumentTitle('My Schedule');
   const { ids, remove, clear } = useMySchedule();
+  const { event } = useEvent();
+  const [reminder, setReminderState] = useState(getReminder);
   const { data, loading, error, reload } = useFetch(() => Promise.all([api.getSessions(), api.getSpeakers()]), []);
   const [sessions = [], speakers = []] = data || [];
 
@@ -19,6 +24,8 @@ export default function MySchedule() {
   const staleCount = ids.length - mine.length; // saved IDs whose session no longer exists
   const conflicts = findConflicts(mine);
   const conflictIds = new Set(conflicts.flat().map((s) => s.id));
+  const speakersOf = (s) => s.speakerIds.map((id) => speakers.find((x) => x.id === id)).filter(Boolean);
+  const exportAll = () => downloadIcs('devfest-2026-my-schedule.ics', buildIcs(mine.map((session) => ({ session, speakers: speakersOf(session) })), event, reminder));
   const grouped = mine.reduce((acc, s) => { (acc[s.date] ||= []).push(s); return acc; }, {});
 
   return (
@@ -44,6 +51,23 @@ export default function MySchedule() {
                 <span>{staleCount} saved session{staleCount > 1 ? 's are' : ' is'} no longer available (removed by organizers).</span>
                 <button className="font-semibold text-ink hover:underline" onClick={() => ids.filter((id) => !sessions.some((s) => s.id === id)).forEach(remove)}>Remove them</button>
               </div>
+            )}
+            {mine.length > 0 && (
+              <section className="mb-8 flex flex-wrap items-end justify-between gap-4 rounded-lg border border-line bg-white p-5" aria-labelledby="cal-h">
+                <div className="max-w-md">
+                  <h2 id="cal-h" className="text-lg font-bold">Get reminders in your calendar</h2>
+                  <p className="mt-1 text-sm text-mute">Download your whole schedule as one file and open it in Google Calendar, Apple Calendar or Outlook. Each session comes with a reminder alarm. You can also add sessions one at a time from the buttons below.</p>
+                </div>
+                <div className="flex flex-wrap items-end gap-3">
+                  <div>
+                    <label htmlFor="reminder" className="label">Remind me</label>
+                    <select id="reminder" className="input" value={reminder} onChange={(e) => { const m = Number(e.target.value); setReminderState(m); setReminder(m); }}>
+                      {REMINDER_OPTIONS.map(([m, l]) => <option key={m} value={m}>{l}</option>)}
+                    </select>
+                  </div>
+                  <button className="btn-primary" onClick={exportAll}><Download className="h-4 w-4" aria-hidden="true" />Add all to calendar (.ics)</button>
+                </div>
+              </section>
             )}
             {mine.length === 0 ? (
               <EmptyState icon={CalendarHeart} title="Your schedule is empty" message="Browse the agenda and tap “Add” on any session to build your personal plan."

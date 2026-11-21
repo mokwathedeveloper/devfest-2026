@@ -8,6 +8,8 @@ import { formatDate, formatTime } from '../utils/time.js';
 import Avatar from '../components/Avatar.jsx';
 import TrackBadge from '../components/TrackBadge.jsx';
 import AddToScheduleButton from '../components/AddToScheduleButton.jsx';
+import CalendarMenu from '../components/CalendarMenu.jsx';
+import { useMySchedule } from '../hooks/useMySchedule.jsx';
 import { EmptyState, ErrorState, Loading } from '../components/States.jsx';
 
 function Fact({ icon: Icon, label, children }) {
@@ -22,6 +24,7 @@ function Fact({ icon: Icon, label, children }) {
 export default function SessionDetail() {
   const { id } = useParams();
   const { event } = useEvent();
+  const { has } = useMySchedule();
   const { data: s, loading, error, reload } = useFetch(() => api.getSession(id), [id]);
   useDocumentTitle(s?.title);
 
@@ -38,7 +41,11 @@ export default function SessionDetail() {
           <div className="flex flex-wrap gap-2"><TrackBadge track={s.track} /><span className="border border-line px-2 py-0.5 text-xs text-mute">{s.type}</span></div>
           <h1 className="mt-4 text-3xl font-bold leading-tight sm:text-4xl">{s.title}</h1>
           <p className="mt-5 whitespace-pre-line leading-relaxed text-ink">{s.description}</p>
-          <div className="mt-8"><AddToScheduleButton sessionId={s.id} /></div>
+          <div className="mt-8 flex flex-wrap items-center gap-3">
+            <AddToScheduleButton sessionId={s.id} />
+            {has(s.id) && <CalendarMenu session={s} speakers={s.speakers} />}
+          </div>
+          {has(s.id) && <p className="mt-3 text-sm text-mute" role="status">Saved to your schedule. Add it to your calendar to get a reminder before it starts.</p>}
           <h2 className="mt-10 text-xl font-bold">{s.speakers.length === 1 ? 'Speaker' : 'Speakers'}</h2>
           {s.speakers.length === 0 && <p className="mt-2 text-mute">Speaker information is not available yet.</p>}
           <ul className="mt-4 grid gap-4 sm:grid-cols-2">
