@@ -2,7 +2,7 @@ import { promises as fs } from 'node:fs';
 import path from 'node:path';
 import { AsyncLocalStorage } from 'node:async_hooks';
 import { fileURLToPath } from 'node:url';
-import { get, put, BlobPreconditionFailedError } from '@vercel/blob';
+import { get, put, list, del, BlobError } from '@vercel/blob';
 import { conflict } from './errors.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -19,34 +19,51 @@ export const DATA_DIR = process.env.DATA_DIR
 export const usesBlob = () => Boolean(process.env.BLOB_READ_WRITE_TOKEN);
 
 const fileFor = (name) => path.join(DATA_DIR, `${name}.json`);
-const blobPath = (name) => `data/${name}.json`;
 
-/** ETags observed during the current locked read→modify→write run (Blob mode only). */
+/**
+ * Blob storage layout: every save creates a NEW immutable file  data/<name>/v000042.json  and the
+ * highest version is the current data. Overwriting one file is not read-after-write consistent on Blob,
+ * but creating a new file is, and creating a version that already exists is rejected, which gives us
+ * atomic conflict detection between concurrent serverless instances for free.
+ */
+const KEEP_VERSIONS = 5;
+const prefixFor = (name) => `data/${name}/`;
+const versionPath = (name, v) => `${prefixFor(name)}v${String(v).padStart(6, '0')}.json`;
+const versionOf = (pathname) => Number(pathname.match(/v(\d+)\.json$/)?.[1] ?? 0);
+
+/** Versions seen by the current locked read→modify→write run. */
 const runContext = new AsyncLocalStorage();
 
 async function readBundled(name) {
   return JSON.parse(await fs.readFile(fileFor(name), 'utf8'));
 }
 
-async function fetchBlob(name) {
-  const res = await get(blobPath(name), { access: 'public', useCache: false });
-  if (!res || res.statusCode !== 200) return null;
-  // Large bodies are served compressed with a weak ETag (W/"…"); conditional writes need the strong form.
-  return { data: JSON.parse(await new Response(res.stream).text()), etag: res.blob.etag?.replace(/^W\//, '') };
+async function latestBlob(name) {
+  const { blobs } = await list({ prefix: prefixFor(name), limit: 1000 });
+  return blobs.reduce((best, b) => (!best || versionOf(b.pathname) > versionOf(best.pathname) ? b : best), null);
+}
+
+const isAlreadyExists = (e) => e instanceof BlobError && /exist/i.test(e.message);
+
+async function createVersion(name, version, data) {
+  await put(versionPath(name, version), JSON.stringify(data, null, 2), {
+    access: 'public', contentType: 'application/json', addRandomSuffix: false, allowOverwrite: false,
+  });
 }
 
 async function readBlob(name) {
-  let found = await fetchBlob(name);
-  if (!found) {
-    // First use: seed the store from the bundled sample data. A concurrent seeder losing the race is fine.
+  let latest = await latestBlob(name);
+  if (!latest) {
+    // First use: seed version 1 from the bundled sample data. Losing a seeding race is fine.
     const seed = await readBundled(name);
-    await put(blobPath(name), JSON.stringify(seed, null, 2), {
-      access: 'public', contentType: 'application/json', addRandomSuffix: false, allowOverwrite: false, cacheControlMaxAge: 60,
-    }).catch(() => {});
-    found = (await fetchBlob(name)) || { data: seed, etag: undefined };
+    await createVersion(name, 1, seed).catch((e) => { if (!isAlreadyExists(e)) throw e; });
+    runContext.getStore()?.set(name, 1);
+    return seed;
   }
-  runContext.getStore()?.set(name, found.etag);
-  return found.data;
+  const res = await get(latest.pathname, { access: 'public' }); // versions are immutable, so CDN caching is safe
+  if (!res || res.statusCode !== 200) throw new Error(`Could not read ${latest.pathname}`);
+  runContext.getStore()?.set(name, versionOf(latest.pathname));
+  return JSON.parse(await new Response(res.stream).text());
 }
 
 /** Read and parse a JSON data file. */
@@ -63,17 +80,23 @@ async function writeLocal(name, data) {
 }
 
 async function writeBlob(name, data) {
-  const ifMatch = runContext.getStore()?.get(name);
+  const ctx = runContext.getStore();
+  let base = ctx?.get(name);
+  if (base === undefined) base = versionOf((await latestBlob(name))?.pathname ?? ''); // write without a prior read
+  const next = base + 1;
   try {
-    const res = await put(blobPath(name), JSON.stringify(data, null, 2), {
-      access: 'public', contentType: 'application/json', addRandomSuffix: false, allowOverwrite: true, cacheControlMaxAge: 60,
-      ...(ifMatch ? { ifMatch } : {}),
-    });
-    runContext.getStore()?.set(name, res.etag);
+    await createVersion(name, next, data);
   } catch (e) {
-    if (e instanceof BlobPreconditionFailedError) throw conflict('Someone else saved changes at the same moment. Please reload and try again.');
+    if (isAlreadyExists(e)) throw conflict('Someone else saved changes at the same moment. Please reload and try again.');
     throw e;
   }
+  ctx?.set(name, next);
+  // Best-effort cleanup of old versions; never fail the request because of it.
+  try {
+    const { blobs } = await list({ prefix: prefixFor(name), limit: 1000 });
+    const stale = blobs.filter((b) => versionOf(b.pathname) <= next - KEEP_VERSIONS).map((b) => b.url);
+    if (stale.length) await del(stale);
+  } catch { /* ignore */ }
 }
 
 export async function writeJson(name, data) {
@@ -82,8 +105,8 @@ export async function writeJson(name, data) {
 
 /**
  * All mutations go through a promise-chain mutex so requests in one process run one at a time
- * (read → validate → write). On Vercel, where several instances can run at once, Blob writes are
- * additionally guarded by ETag (`ifMatch`): a write based on stale data is rejected, never lost.
+ * (read → validate → write). On Vercel, where several instances can run at once, the version-numbered
+ * Blob files above reject a write that was based on stale data instead of silently overwriting it.
  */
 let lock = Promise.resolve();
 export function withLock(task) {
