@@ -75,6 +75,25 @@ Validation highlights: required fields, `YYYY-MM-DD` dates within the event, `HH
 
 `server/data/{speakers,sessions,tracks,event}.json`. Sessions reference speakers by `speakerIds`. All writes go through a single in-process lock (read → validate → write) and are **atomic** (temp file + rename), so concurrent requests can't corrupt files or lose updates. This assumes a **single server process** — don't run multiple instances against the same data directory. Login is rate-limited; if you deploy, serve over HTTPS and keep the data directory on persistent storage.
 
+## Deploying to Vercel
+
+The repo deploys as one Vercel project: the React app is served as static files and the Express API runs as a single serverless function behind `/api/*` (see `vercel.json` and `api/index.js`).
+
+Vercel's filesystem is read-only, so on Vercel the data and uploaded photos live in **Vercel Blob** instead of local files. The app switches automatically when `BLOB_READ_WRITE_TOKEN` is present; local development is unchanged.
+
+1. Import the GitHub repo into Vercel (root directory = repo root; no framework preset).
+2. Create a **public** Blob store and connect it to the project (Storage tab, or `vercel blob create-store <name> --access public`). This adds `BLOB_READ_WRITE_TOKEN`.
+3. Add these environment variables for Production:
+   - `ADMIN_PASSWORD_HASH`: output of `npm run hash-password -- "your-password"` (without the surrounding quotes)
+   - `JWT_SECRET`: a long random string
+4. Deploy. Pushes to `main` deploy automatically.
+
+To change the admin password later: `vercel env rm ADMIN_PASSWORD_HASH production`, add the new hash with `vercel env add ADMIN_PASSWORD_HASH production`, then redeploy.
+
+**How Blob storage works.** Each save creates a new numbered file (`data/speakers/v000007.json`) and the highest number is the current data. Blob overwrites are not read-after-write consistent, but new files are, and creating a version that already exists is refused. So two admins saving at once can never silently overwrite each other: the second gets a "Someone else saved changes, please reload" message. The last 5 versions are kept as a simple history. The first request seeds the store from `server/data/*.json`, so those files are only the initial sample data on Vercel.
+
+Photos are stored in the same Blob store and referenced by absolute URL. The login rate limiter is in-memory, so on Vercel it is per function instance; use a strong admin password.
+
 ## Tests
 
 ```bash
